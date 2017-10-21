@@ -25,14 +25,18 @@ servo_min = 0  # Min pulse length out of 4096
 servo_max = 4095  # Max pulse length out of 4096
 forward = 1
 turn_direction = 1
-if len(sys.argv) != 0:
-    servo_max = sys.argv[0]
+turn_amount = 0
+if sys.argv[0] is not None:
+    forward = sys.argv[0]
 
 if sys.argv[1] is not None:
-    forward = sys.argv[1]
+    servo_max = sys.argv[1]
 
 if sys.argv[2] is not None:
     turn_direction = sys.argv[2]
+
+if sys.argv[3] is not None:
+    turn_amount = sys.argv[3]
 
 
 # Helper function to make setting a servo pulse width simpler.
@@ -57,17 +61,17 @@ print('Moving servo on channel 0, press Ctrl-C to quit...')
 #     time.sleep(1)
 #     pwm.set_pwm(7, 0, servo_max)
 #     time.sleep(1)
-if forward == 1
+if forward == 1:
     pwm.set_pwm(0, 0, speed);
     pwm.set_pwm(1,0,0);
-else
+else:
     pwm.set_pwm(0,0,0);
     pwm.set_pwm(1,0,speed);
 
-if turn_direction == 1
+if turn_direction == 1:
     pwm.set_pwm(3, 0, turn_amount);
     pwm.set_pwm(4,0,0);
-else
+else:
     pwm.set_pwm(3,0,0);
     pwm.set_pwm(4,0,turn_amount);
 time.sleep(5)
