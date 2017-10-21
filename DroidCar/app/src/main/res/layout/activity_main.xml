@@ -17,6 +17,8 @@
         android:minHeight="4dip"
         android:minWidth="4dip"
         android:max="4095"
+        android:paddingHorizontal="350dp"
+        android:paddingVertical="350dp"
         tools:layout_editor_absoluteX="107dp"
         tools:layout_editor_absoluteY="178dp"
         android:layout_marginEnd="36dp"
@@ -41,6 +43,17 @@
         android:textOn="Drive"
         android:layout_above="@+id/seekBar"
         android:layout_alignStart="@+id/brakeButton" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="25dp"
+        android:layout_height="250dp"
+        android:text="T\nH\nR\nO\nT\nT\nL\nE"
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:layout_marginEnd="113dp"
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/seekBar" />
 
 
 </RelativeLayout>
