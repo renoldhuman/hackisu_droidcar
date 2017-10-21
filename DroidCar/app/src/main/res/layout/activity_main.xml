@@ -11,11 +11,36 @@
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="75dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_weight="0.28"
+        android:rotation="270"
+        android:minHeight="4dip"
+        android:minWidth="4dip"
+        android:max="4095"
         tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="178dp" />
+        tools:layout_editor_absoluteY="178dp"
+        android:layout_marginEnd="36dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/brakeButton"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Brake"
+        android:layout_below="@+id/seekBar"
+        android:layout_toStartOf="@+id/seekBar"
+        android:layout_marginEnd="60dp" />
+
+    <ToggleButton
+        android:id="@+id/shiftButton"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="Shift"
+        android:textOff="Reverse"
+        android:textOn="Drive"
+        android:layout_above="@+id/seekBar"
+        android:layout_alignStart="@+id/brakeButton" />
+
+
 </RelativeLayout>
