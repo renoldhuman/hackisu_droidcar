@@ -4,18 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation = "vertical"
-    tools:context="com.example.android.droidcar.MainActivity"
-    android:weightSum="1">
+    android:orientation = "horizontal"
+    tools:context="com.example.android.droidcar.MainActivity">
+
 
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_weight="0.28"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="178dp" />
+        android:layout_width="150dp"
+        android:layout_height="350dp"
+        android:layout_weight=".28"
+        <!--android:maxWidth="150dp"-->
+        <!--android:maxHeight="350dp"-->
+        <!--tools:layout_editor_absoluteX="107dp"-->
+        <!--tools:layout_editor_absoluteY="178dp"-->
+        <!--android:rotation="270"-->
+        <!--android:layout_marginEnd="69dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
+
 </RelativeLayout>
