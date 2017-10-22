@@ -55,5 +55,23 @@
         android:layout_centerVertical="true"
         android:layout_alignEnd="@+id/seekBar" />
 
+    <Button
+        android:id="@+id/leftTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Left"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/shiftButton"
+        android:layout_marginStart="50dp" />
+
+    <Button
+        android:id="@+id/rightTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:text="Right" />
+
 
 </RelativeLayout>
