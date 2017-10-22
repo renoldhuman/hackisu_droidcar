@@ -27,14 +27,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity{
+
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
     private int rcSpeed = 0;
     private int storeSpeed = 0;
     private int brakeSpeed = 0;
     private int rcShift = 1;
     private int rcTurn = 1;
-    private float rcTurnAmt = 0.0f;
+    private int rcTurnAmt = 0;
     private boolean brakePress = false;
 
     private SensorManager mSensorManager;
@@ -186,90 +187,96 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-//        try {
-//            mSensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
-//            mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-//            mSensorManager.registerListener(this, mRotationSensor, SensorManager.SENSOR_DELAY_NORMAL);
-//        } catch (Exception e) {
-//
-//        }
+        try {
+            mSensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+            mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+            mSensorManager.registerListener(this, mRotationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        } catch (Exception e) {
+
+        }
 
     }
 
-//    @Override
-//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//        // TODO Auto-generated method stub
-//    }
-//
-//    @Override
-//    public void onSensorChanged(SensorEvent event) {
-////        try{
-////           // Thread.sleep(1000);
-////        }catch(InterruptedException e){
-////            e.printStackTrace();
-////        }
-//        if (event.sensor == mRotationSensor) {
-//            if (event.values.length > 4) {
-//                float[] truncatedRotationVector = new float[4];
-//                System.arraycopy(event.values, 0, truncatedRotationVector, 0, 4);
-//                update(truncatedRotationVector);
-//            } else {
-//                update(event.values);
-//            }
-//        }
-//    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // TODO Auto-generated method stub
+    }
 
-//    private void update(float[] vectors) {
-//        float[] rotationMatrix = new float[9];
-//        SensorManager.getRotationMatrixFromVector(rotationMatrix, vectors);
-//        int worldAxisX = SensorManager.AXIS_X;
-//        int worldAxisZ = SensorManager.AXIS_Z;
-//        float[] adjustedRotationMatrix = new float[9];
-//        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisX, worldAxisZ, adjustedRotationMatrix);
-//        float[] orientation = new float[3];
-//        SensorManager.getOrientation(adjustedRotationMatrix, orientation);
-//        float pitch = orientation[1] * FROM_RADS_TO_DEGS;
-//        float roll = orientation[0] * FROM_RADS_TO_DEGS;
-//        //Log.d("pitch", "= "+pitch);
-//       // Log.d("roll", "= "+roll);
-//
-////        boolean maxLeft = false;
-////        boolean left = false;
-////        boolean neutral = true;
-////        boolean right = false;
-////        boolean maxRight = false;
-//        //Neutral
-//        if(roll > 30 && roll < 90 && !neutral){
-//            maxLeft=left=right=maxRight = false;
-//            neutral = true;
-//            rcTurnAmt = 0;
-//            sendRequest();
-//        }else if(roll > 0 && roll < 30 && !left){
-//            maxLeft=neutral=right=maxRight = false;
-//            left = true;
-//            rcTurnAmt = 2048;
-//            rcTurn = 1;
-//            sendRequest();
-//        }else if(roll < 0 && !maxLeft){
-//            left=neutral=right=maxRight = false;
-//            maxLeft = true;
-//            rcTurnAmt = 4095;
-//            rcTurn = 1;
-//            sendRequest();
-//        }else if(roll > 90 && roll < 130 && !right){
-//            maxLeft=left=neutral=maxRight = false;
-//            right = true;
-//            rcTurnAmt = 2048;
-//            rcTurn = 0;
-//            sendRequest();
-//        }else if(roll > 130 && !maxRight){
-//            maxLeft=left=neutral=right = false;
-//            maxRight = true;
-//            rcTurnAmt = 4095;
-//            rcTurn = 0;
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+//        try{
+//           // Thread.sleep(1000);
+//        }catch(InterruptedException e){
+//            e.printStackTrace();
 //        }
-//
-//    }
+        if (event.sensor == mRotationSensor) {
+            if (event.values.length > 4) {
+                float[] truncatedRotationVector = new float[4];
+                System.arraycopy(event.values, 0, truncatedRotationVector, 0, 4);
+                update(truncatedRotationVector);
+            } else {
+                update(event.values);
+            }
+        }
+    }
+
+    private void update(float[] vectors) {
+        float[] rotationMatrix = new float[9];
+        SensorManager.getRotationMatrixFromVector(rotationMatrix, vectors);
+        int worldAxisX = SensorManager.AXIS_X;
+        int worldAxisZ = SensorManager.AXIS_Z;
+        float[] adjustedRotationMatrix = new float[9];
+        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisX, worldAxisZ, adjustedRotationMatrix);
+        float[] orientation = new float[3];
+        SensorManager.getOrientation(adjustedRotationMatrix, orientation);
+        float pitch = orientation[1] * FROM_RADS_TO_DEGS;
+        float roll = orientation[0] * FROM_RADS_TO_DEGS;
+        //Log.d("pitch", "= "+pitch);
+       // Log.d("roll", "= "+roll);
+
+//        boolean maxLeft = false;
+//        boolean left = false;
+//        boolean neutral = true;
+//        boolean right = false;
+//        boolean maxRight = false;
+        //Neutral
+        if(roll > 30 && roll < 90 && !neutral){
+            maxLeft=left=right=maxRight = false;
+            neutral = true;
+            rcTurnAmt = 0;
+            Log.d("Roll", ""+roll);
+            sendRequest();
+        }else if(roll > 0 && roll < 30 && !left){
+            maxLeft=neutral=right=maxRight = false;
+            left = true;
+            rcTurnAmt = 2048;
+            rcTurn = 1;
+            Log.d("Roll", ""+roll);
+            sendRequest();
+        }else if(roll < 0 && !maxLeft){
+            left=neutral=right=maxRight = false;
+            maxLeft = true;
+            rcTurnAmt = 4095;
+            rcTurn = 1;
+            Log.d("Roll", ""+roll);
+            sendRequest();
+        }else if(roll > 90 && roll < 115 && !right){
+            maxLeft=left=neutral=maxRight = false;
+            right = true;
+            rcTurnAmt = 2048;
+            rcTurn = 0;
+            Log.d("Roll", ""+roll);
+            sendRequest();
+        }else if(roll > 115 && !maxRight){
+            maxLeft=left=neutral=right = false;
+            maxRight = true;
+            rcTurnAmt = 4095;
+            rcTurn = 0;
+            Log.d("Roll", ""+roll);
+            sendRequest();
+        }
+
+    }
 
     private void sendRequest(){
         Log.d("sendRequest", "inside of send request");

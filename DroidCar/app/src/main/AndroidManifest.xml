@@ -17,9 +17,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <uses-feature
-                android:name="android.hardware.sensor.acclerometer"
-                android:required="true"/>
         </activity>
     </application>
 
