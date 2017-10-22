@@ -1,7 +1,5 @@
 package com.example.android.droidcar;
 
-import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -13,10 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.app.Activity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,10 +25,9 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.Math;
 
 
-public class MainActivity extends AppCompatActivity implements Orientation.Listener {
+public class MainActivity extends AppCompatActivity{
 
     private int rcSpeed = 0;
     private int storeSpeed = 0;
@@ -41,11 +38,16 @@ public class MainActivity extends AppCompatActivity implements Orientation.Liste
     private boolean brakePress = false;
 
     private SensorManager mSensorManager;
-    private Sensor rotate;
+    private Sensor mRotationSensor;
 
-    private Orientation mOrientation;
-    //private AttitudeIndicator mAttitudeIndicator;
+    //private static final int SENSOR_DELAY = 1000000;
+    private static final int FROM_RADS_TO_DEGS = -57;
 
+    boolean maxLeft = false;
+    boolean left = false;
+    boolean neutral = true;
+    boolean right = false;
+    boolean maxRight = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,34 +186,90 @@ public class MainActivity extends AppCompatActivity implements Orientation.Liste
             }
         });
 
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mOrientation = new Orientation(this);
+//        try {
+//            mSensorManager = (SensorManager) getSystemService(Activity.SENSOR_SERVICE);
+//            mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+//            mSensorManager.registerListener(this, mRotationSensor, SensorManager.SENSOR_DELAY_NORMAL);
+//        } catch (Exception e) {
+//
+//        }
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mOrientation.startListening(this);
-    }
+//    @Override
+//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//        // TODO Auto-generated method stub
+//    }
+//
+//    @Override
+//    public void onSensorChanged(SensorEvent event) {
+////        try{
+////           // Thread.sleep(1000);
+////        }catch(InterruptedException e){
+////            e.printStackTrace();
+////        }
+//        if (event.sensor == mRotationSensor) {
+//            if (event.values.length > 4) {
+//                float[] truncatedRotationVector = new float[4];
+//                System.arraycopy(event.values, 0, truncatedRotationVector, 0, 4);
+//                update(truncatedRotationVector);
+//            } else {
+//                update(event.values);
+//            }
+//        }
+//    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mOrientation.stopListening();
-    }
-
-    @Override
-    public void onOrientationChanged(float pitch, float roll) {
-       // mAttitudeIndicator.setAttitude(pitch, roll);
-        try{
-            Thread.sleep(1000);
-            Log.d("Pitch","= "+pitch);
-            Log.d("Roll", "= "+roll);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-    }
+//    private void update(float[] vectors) {
+//        float[] rotationMatrix = new float[9];
+//        SensorManager.getRotationMatrixFromVector(rotationMatrix, vectors);
+//        int worldAxisX = SensorManager.AXIS_X;
+//        int worldAxisZ = SensorManager.AXIS_Z;
+//        float[] adjustedRotationMatrix = new float[9];
+//        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisX, worldAxisZ, adjustedRotationMatrix);
+//        float[] orientation = new float[3];
+//        SensorManager.getOrientation(adjustedRotationMatrix, orientation);
+//        float pitch = orientation[1] * FROM_RADS_TO_DEGS;
+//        float roll = orientation[0] * FROM_RADS_TO_DEGS;
+//        //Log.d("pitch", "= "+pitch);
+//       // Log.d("roll", "= "+roll);
+//
+////        boolean maxLeft = false;
+////        boolean left = false;
+////        boolean neutral = true;
+////        boolean right = false;
+////        boolean maxRight = false;
+//        //Neutral
+//        if(roll > 30 && roll < 90 && !neutral){
+//            maxLeft=left=right=maxRight = false;
+//            neutral = true;
+//            rcTurnAmt = 0;
+//            sendRequest();
+//        }else if(roll > 0 && roll < 30 && !left){
+//            maxLeft=neutral=right=maxRight = false;
+//            left = true;
+//            rcTurnAmt = 2048;
+//            rcTurn = 1;
+//            sendRequest();
+//        }else if(roll < 0 && !maxLeft){
+//            left=neutral=right=maxRight = false;
+//            maxLeft = true;
+//            rcTurnAmt = 4095;
+//            rcTurn = 1;
+//            sendRequest();
+//        }else if(roll > 90 && roll < 130 && !right){
+//            maxLeft=left=neutral=maxRight = false;
+//            right = true;
+//            rcTurnAmt = 2048;
+//            rcTurn = 0;
+//            sendRequest();
+//        }else if(roll > 130 && !maxRight){
+//            maxLeft=left=neutral=right = false;
+//            maxRight = true;
+//            rcTurnAmt = 4095;
+//            rcTurn = 0;
+//        }
+//
+//    }
 
     private void sendRequest(){
         Log.d("sendRequest", "inside of send request");
