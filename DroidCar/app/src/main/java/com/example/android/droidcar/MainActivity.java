@@ -1,6 +1,7 @@
 package com.example.android.droidcar;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -29,7 +30,7 @@ import java.util.Map;
 import java.lang.Math;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Orientation.Listener {
 
     private int rcSpeed = 0;
     private int storeSpeed = 0;
@@ -40,14 +41,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean brakePress = false;
 
     private SensorManager mSensorManager;
-    private Sensor accelerometer;
-    private Sensor magnetometer;
-    private float[] gravity;
-    private float[] magnetic;
-    private float[] orientation;
+    private Sensor rotate;
 
-    TextView tvVert;
-    int vert_id;
+    private Orientation mOrientation;
+    //private AttitudeIndicator mAttitudeIndicator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,98 +185,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mOrientation = new Orientation(this);
 
-        SensorEventListener magnetListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                Log.d("inside","magnetListener");
-                Log.d("magnet","values"+event.values[0]);
-            }
+    }
 
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mOrientation.startListening(this);
+    }
 
-            }
-        };
-//        SensorEventListener phoneListener = new SensorEventListener() {
-//            @Override
-//            public void onSensorChanged(SensorEvent event) {
-//                if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-//                    magnetic = event.values;
-//                    Log.d("here","inside event");
-//                    Log.d("Magnetic Values", "=" +magnetic[0]+magnetic[1]);
-//                }
-//                if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//                    gravity = event.values;
-//                    Log.d("Gravity Values", "="+gravity);
-//                }
-//                if ((gravity == null) || (magnetic == null))
-//                    return;
-//                float[] fR = new float[9];
-//                float[] fI = new float[9];
-//                if (!SensorManager.getRotationMatrix(fR, fI, gravity, magnetic))
-//                    return;
-//                if (orientation == null)
-//                    orientation = new float[3];
-//                SensorManager.getOrientation(fR, orientation);
-//                int new_id = R.string.sensor_vertical;
-//                if ((Math.abs(orientation[1]) + Math.abs(orientation[2])) < 1)
-//                    new_id = R.string.sensor_horizontal;
-//                if (new_id != vert_id) {
-//                    vert_id = new_id;
-//                    if (tvVert != null)
-//                        tvVert.setText(vert_id);
-//                }
-//            }
-//
-//            @Override
-//            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//
-//            }
-//        };
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mOrientation.stopListening();
+    }
 
-        mSensorManager.registerListener(magnetListener, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-
-//        gyroscopeSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-//        SensorEventListener gyroscopeSensorListener = new SensorEventListener(){
-//            @Override
-//            public void onSensorChanged(SensorEvent sensorEvent){
-//                if(sensorEvent.values[0] > 0.5f) { // anticlockwise (right)
-//                    Log.d("SensorEvent","Rotation on x-axis > 0.5f == "+sensorEvent.values[0]);
-//                    rcTurn = 0;
-//                    float rollRight = Math.abs(sensorEvent.values[0]);
-//                    if(rollRight > 10){
-//                        rollRight = 10.0f;
-//                    }
-//                    rcTurnAmt = rollRight*430-215;
-//                    sendRequest();
-//                    Log.d("RCTurning", "Turn right - "+rcTurnAmt);
-//                } else if(sensorEvent.values[0] < -0.5f) { // clockwise (left)
-//                    Log.d("SensorEvent","Rotation on x-axis > 0.5f == "+sensorEvent.values[0]);
-//                    rcTurn = 1;
-//                    float rollLeft = Math.abs(sensorEvent.values[0]);
-//                    if(rollLeft > 10){
-//                        rollLeft = 10.0f;
-//                    }
-//                    rcTurnAmt = rollLeft*430-215;
-//                    sendRequest();
-//                    Log.d("RCTurning", "Turn left - "+rcTurnAmt);
-//                }
-//            }
-//
-//            @Override
-//            public void onAccuracyChanged(Sensor sensor, int i){
-//
-//            }
-//        };
-//
-//        mSensorManager.registerListener(gyroscopeSensorListener, gyroscopeSensor,
-//                SensorManager.SENSOR_DELAY_NORMAL);
-
-
+    @Override
+    public void onOrientationChanged(float pitch, float roll) {
+       // mAttitudeIndicator.setAttitude(pitch, roll);
+        try{
+            Thread.sleep(1000);
+            Log.d("Pitch","= "+pitch);
+            Log.d("Roll", "= "+roll);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
     }
 
     private void sendRequest(){
