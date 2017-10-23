@@ -120,6 +120,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+        final Button neutral = (Button) findViewById(R.id.neutral);
+        neutral.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event){
+                switch (event.getAction() & MotionEvent.ACTION_MASK){
+                    case MotionEvent.ACTION_BUTTON_PRESS:
+                        rcTurnAmt = 0;
+                        sendRequest();
+                        return true;
+                }
+                return false;
+            }
+        });
+
         final ToggleButton shift = (ToggleButton) findViewById(R.id.shiftButton);
         shift.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
